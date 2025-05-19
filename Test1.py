@@ -1,74 +1,36 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
 
-job_step = st.sidebar.select_slider(
-    "Select a step in the applicant process to ANALYZE",
-    options=[
-        "Apply",
-        "Reviewed",
-        "Screen",
-        "Interview",
-        "Offer",
-        "Ready for Hire",
-    ],
-)
+st.set_page_config(layout="wide")
 
-st.sidebar.write("")
+st.title('How to layout your Streamlit app')
 
-option = st.sidebar.selectbox(
-    'What do you want to compare it to++++++++++?',
-    ('Rejected/Declined','Apply','Reviewed','Screen','Interview','Offer','Ready for Hire'))
+with st.expander('About this app'):
+  st.write('This app shows the various ways on how you can layout your Streamlit app.')
+  st.image('https://streamlit.io/images/brand/streamlit-logo-secondary-colormark-darktext.png', width=250)
 
-st.sidebar.write("")
+st.sidebar.header('Input')
+user_name = st.sidebar.text_input('What is your name?')
+user_emoji = st.sidebar.selectbox('Choose an emoji', ['', '😄', '😆', '😊', '😍', '😴', '😕', '😱'])
+user_food = st.sidebar.selectbox('What is your favorite food?', ['', 'Tom Yum Kung', 'Burrito', 'Lasagna', 'Hamburger', 'Pizza'])
 
-option1 = st.sidebar.multiselect(
-    'What Business Units?',
-    ['Finance','Marketing','HR','Operations','Product','Sales'])
+st.header('Output')
 
-st.sidebar.write("")
+col1, col2, col3 = st.columns(3)
 
-st.sidebar.write('What challenges do you want TA GPT to help with?')
+with col1:
+  if user_name != '':
+    st.write(f'👋 Hello {user_name}!')
+  else:
+    st.write('👈  Please enter your **name**!')
 
-Scenario_TTF = st.sidebar.checkbox("Time to Fill")
-Scenario_Difficulty = st.sidebar.checkbox("Location")
-Scenario_Conversion = st.sidebar.checkbox("Conversion")
-Scenario_Quantity = st.sidebar.checkbox("Compensation")
+with col2:
+  if user_emoji != '':
+    st.write(f'{user_emoji} is your favorite **emoji**!')
+  else:
+    st.write('👈 Please choose an **emoji**!')
 
-st.write("Segmented Trending by ", job_step)
-chart_data = pd.DataFrame(
-     np.random.randn(20, 3),
-     columns=['a', 'b', 'c'])
-
-st.line_chart(chart_data)
-
-st.write("")
-st.write("")
-st.write("")
-
-# st.latex(r'''
-#     a + ar + a r^2 + a r^3 + \cdots + a r^{n-1} =
-#     \sum_{k=0}^{n-1} ar^k =
-#     a \left(\frac{1-r^{n}}{1-r}\right)
-#     ''')
-
-st.write("")
-st.write("")
-st.write("")
-
-st.title('Customizing the theme of Streamlit apps')
-
-st.write('Contents of the `.streamlit/config.toml` file of this app')
-
-st.code("""
-[theme]
-primaryColor="#F39C12"
-backgroundColor="#2E86C1"
-secondaryBackgroundColor="#AED6F1"
-textColor="#FFFFFF"
-font="monospace"
-""")
-
-st.write("")
-st.write("")
-st.write("")
+with col3:
+  if user_food != '':
+    st.write(f'🍴 **{user_food}** is your favorite **food**!')
+  else:
+    st.write('👈 Please choose your favorite **food**!')
