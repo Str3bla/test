@@ -17,7 +17,7 @@ job_step = st.sidebar.select_slider(
 st.sidebar.write("")
 
 option = st.sidebar.selectbox(
-    'What do you want to compare it to++++++++++?',
+    'What do you want to compare it to?',
     ('Rejected/Declined','Apply','Reviewed','Screen','Interview','Offer','Ready for Hire'))
 
 st.sidebar.write("")
