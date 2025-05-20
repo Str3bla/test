@@ -111,7 +111,7 @@ with st.form('my_form'):
     # Every form must have a submit button
     submitted = st.form_submit_button('Submit')
 
-if submitted:
+# if submitted:
     st.markdown(f'''
         ☕ You have ordered:
         - Coffee bean: `{coffee_bean_val}`
@@ -121,8 +121,8 @@ if submitted:
         - Milk: `{milk_val}`
         - Bring own cup: `{owncup_val}`
         ''')
-else:
-    st.write('☝️ Place your order!')
+# else:
+#    st.write('☝️ Place your order!')
 
 
 # Short example of using an object notation
