@@ -1,19 +1,12 @@
 import streamlit as st
-# The 'import' statement brings in code from other packages
-# 'streamlit' is the web app framework, we nickname it 'st' for short
-
-
 from openai import OpenAI
-    # This imports the OpenAI client to talk to ChatGPT
-    # The 'try' block attempts to import it 
-
 
 # === PAGE CONFIGURATION ===
 # This MUST be the first Streamlit command in your script
 st.set_page_config(
-    page_title="ChatGPT Prompt Builder",  # Browser tab title 
+    page_title="ChatGPT Prompt Builder",  # Browser tab title
     page_icon="🤖",                       # Browser tab icon
-    layout="wide"                         # Use full screen width
+    layout="centered"                     # Use centered screen width
 )
 
 # === INITIALIZE SESSION STATE ===
@@ -22,87 +15,129 @@ st.set_page_config(
 if 'messages' not in st.session_state:
     st.session_state.messages = []  # Store conversation history
 
-# === API KEY SETUP ===
-# You can set your API key in several ways:
-# 1. Directly in code (not recommended for production)
-# 2. Using Streamlit secrets (recommended)
-# 3. Using environment variables
-
-# Method 1: Direct (replace with your actual key)
-# api_key = "sk-your-api-key-here"
-
-# Method 2: Using Streamlit secrets (recommended)
-# Create .streamlit/secrets.toml file with: OPENAI_API_KEY = "your-key"
-try:
-    api_key = st.secrets["OpenAI_Token"]
-except:
-    api_key = st.text_input("Enter your OpenAI API key:", type="password")
-    if not api_key:
-        st.warning("Please enter your OpenAI API key to continue")
-        st.stop()
-
-# Initialize the OpenAI client with your API key
-client = OpenAI(api_key=api_key)
-
 # === PROMPT ENGINEERING TEMPLATES ===
 # These are behind-the-scenes instructions for ChatGPT
 # You can modify these to change how ChatGPT responds
 prompt_templates = {
-    "Professional tone": "Please respond in a professional, business-appropriate manner. ",
-    "Detailed explanation": "Please provide a comprehensive and detailed explanation. ",
-    "Include examples": "Please include practical examples to illustrate your points. ",
-    "Keep it concise": "Please keep your response brief and to the point. ",
-    "Technical language": "Please use technical terminology and assume technical knowledge. ",
-    "Simple language": "Please explain in simple terms that anyone can understand. ",
-    "Step by step": "Please break down your response into clear, numbered steps. ",
-    "Pros and cons": "Please include both advantages and disadvantages in your analysis. ",
-    "Creative approach": "Please be creative and think outside the box in your response. ",
-    "Data-driven": "Please support your response with data, statistics, or research when possible. "
+    "The Straight Shooter": "Prepared, responsive, and focused on role clarity. Gives clear information, respects your time, and expects a smooth process. Needs efficiency, alignment confirmation, and clear timelines. ",
+    "The Strategist": "Sees hiring as part of a broader org design or long-term plan. Talks about future goals, team structure, and alignment. Needs help defining the ideal profile and expects pushback on unrealistic asks. ",
+    "The Checklist Manager": "Fixated on rigid requirements and credentials. Often says, "They must have XYZ years of…" or lists specific companies. Needs structure, validation, and strict alignment to their checklist. ",
+    "The Unprepared or Indifferent": "Busy, distracted, or disengaged. Often lacks a Job Description, vague about the role, and minimally involved. Needs structured support, proactive reminders, and intake handholding. ",
+    "The Technical Expert": "Deep domain knowledge, often focused on technical depth. May use jargon, fixate on tests, and downplay soft skills. Needs help translating expertise into realistic hiring signals. ",
+    "The Pressure Cooker": "Operating under urgency or executive pressure. Often says, "We needed someone yesterday," with many open roles. Needs fast traction, updates, and a sense of progress. ",
+    "The Skeptic or Past-Burned": "Cautious from past bad hires or TA experiences. Micromanages, slow to trust, and may challenge recruiter input. Needs transparency, reliability, and re-earning of credibility. ",
+    "The Overconfident Marketer": "Assumes the role or company will attract talent on its own. Skips sourcing detail and minimizes candidate concerns. Needs grounded market insight and candidate-centric perspective. ",
+    "The Aspirational Builder": "Sets a high bar, seeking "A+ players" to elevate the team. Talks about elite hiring and upgrading the team. Needs sourcing creativity, competitive intel, and strong calibration. "
 }
 
 # === APP TITLE ===
-st.title("ChatGPT Prompt Builder 🤖")
-st.markdown("Build better prompts with pre-configured options")
+
+st.markdown(
+        """
+        <div style='display: flex; align-items: baseline; gap: 8px;'>
+            <span style='font-size: 2rem; font-weight: 700;'>Your Copilot for Hiring Manager Calls</span>
+            <span style='font-size: 1.25rem; font-weight: 400;'>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+st.markdown("Smarter Intakes. Better Hires.")
 
 # === SIDEBAR CONFIGURATION ===
 # The sidebar appears on the left side of the screen
 with st.sidebar:
-    st.header("🛠️ Prompt Configuration")
-    
-    # Multiselect widget - users can choose multiple options
-    selected_options = st.multiselect(
-        "Select prompt modifiers:",
-        options=list(prompt_templates.keys()),  # Show all available templates
-        default=[],  # No options selected by default
-        help="Choose how you want ChatGPT to respond"
+
+    st.sidebar.markdown(
+        """
+        <div style='text-align: center; margin-top: -30px; margin-bottom: 20px;'>
+            <span style='font-size: 2rem; font-weight: 700;'>Intakeology</span>
+        </div>
+        """,
+        unsafe_allow_html=True
     )
-    
-    # Model selection
+
+    st.header("📋 Job Profile")
+
+    # TEST JOB PROFILE SELECTBOX
+    job_function_choice = st.multiselect(
+        "Select Job Function:",
+        ["Finance","Information Technology","Call Center","Sales","Back Office"]
+    )
+
+    st.divider()
+
+    st.header("💼 Hiring Manager")
+ 
+    # Define your placeholder value
+    default_placeholder = "Hiring Manager"
+
+    # Show the input field with pre-filled value
+    user_input_hiring_manager = st.text_input(
+        "Enter your hiring manager name:",
+        value=default_placeholder
+    )
+
+    # Check if the input is still unchanged or empty
+    if user_input_hiring_manager.strip() == default_placeholder or not user_input_hiring_manager.strip():
+        st.warning("⚠️ Make sure to personalize before sending.")
+
+    # Use in output
+    hiring_manager_name = user_input_hiring_manager.strip() or default_placeholder
+
+    # Hiring Manager Persona selection
+    selected_options = st.selectbox(
+        "Select Hiring Manager Persona:",
+        options=list(prompt_templates),  # Show all available templates,
+        help="What is the type of hiring manager you're going to talk to?"
+    )
+
+    st.markdown(
+    f"<p style='font-size:0.85rem; font-style:italic; color:#555;'>{prompt_templates[selected_options]}</p>",
+    unsafe_allow_html=True
+    )
+
+    st.divider()
+
+    st.header("🧑 Recruiting Configuration")
+
+    # TEST METRIC SELECTBOX
+    recruiter_choice = st.selectbox(
+        "Select Recruiter Name:",
+        ["Beth","John","Anthony","Sam"]
+    )
+
+    # TEST METRIC SELECTBOX
+    ta_metric_1_choice = st.selectbox(
+        "Select Metric:",
+        ["Time to Fill","Cost per Hire"]
+    )
+
+    st.divider()
+
+    st.header("🛠️ System Configuration")
+
+        # ChatGPT Model selection
     model_choice = st.selectbox(
         "Select GPT Model:",
         ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo-preview"],
         help="GPT-3.5 is faster and cheaper, GPT-4 is more capable"
     )
-    
-    # Temperature slider (controls creativity)
-    temperature = st.slider(
-        "Response creativity:",
-        min_value=0.0,
-        max_value=2.0,
-        value=0.7,
-        step=0.1,
-        help="Lower = more focused, Higher = more creative"
-    )
-    
-    # Show selected options
-    if selected_options:
-        st.success(f"Active modifiers: {len(selected_options)}")
-        with st.expander("View selected modifiers"):
-            for option in selected_options:
-                st.write(f"✓ {option}")
+
+    # Method 2: Using Streamlit secrets (recommended)
+    # Create .streamlit/secrets.toml file with: OPENAI_API_KEY = "your-key"
+    openai_api_key = st.text_input("OpenAI API Key", type="password")
+    if not openai_api_key:
+        st.info("Please add your OpenAI API key to continue.", icon="🗝️")
+
+# Initialize the OpenAI client outside the sidebar
+# This ensures it's available for the submit button
+client = None
+if openai_api_key:
+    client = OpenAI(api_key=openai_api_key)
 
 # === MAIN CONTENT AREA ===
-col1, col2 = st.columns([2, 1])  # Create two columns, left one twice as wide
+col1, col2 = st.columns([2, 1])  # Create two columns, left one twice as wide. the right column is blank for now
 
 with col1:
     st.header("💬 Ask Your Question")
@@ -110,7 +145,7 @@ with col1:
     # Text area for user input
     user_question = st.text_area(
         "Enter your question:",
-        placeholder="Example: Explain how machine learning works",
+        placeholder="Example: What are the key skills we should prioritize for this role?",
         height=120,  # Height in pixels
         key="user_input"  # Unique identifier for this widget
     )
@@ -123,28 +158,35 @@ with col1:
     )
 
 with col2:
-    st.header("📋 Current Prompt")
+    st.header(" ")
     # Show user what prompt will be sent
-    if selected_options:
-        st.caption("Your prompt will include:")
-        for option in selected_options:
-            st.write(f"• {option}")
-    else:
-        st.caption("No modifiers selected")
 
 # === PROCESS THE REQUEST ===
 # This code runs when the submit button is clicked
 if submit_button:
     if not user_question:
         st.error("❌ Please enter a question first!")
+    elif not client:
+        st.error("❌ Please enter your OpenAI API key in the sidebar!")
     else:
-        # Build the complete prompt
-        # Start with the prompt engineering instructions
-        system_prompt = "You are a helpful AI assistant. "
-        
-        # Add each selected modifier
-        for option in selected_options:
-            system_prompt += prompt_templates[option]
+        # Build a comprehensive system prompt with all context
+        system_prompt = f"""You are a helpful Talent Acquisition AI Assistant who is an expert in the hiring manager job intake process. 
+
+CONTEXT FOR THIS INTERACTION:
+- Job Function(s): {', '.join(job_function_choice) if job_function_choice else 'Not specified'}
+- Hiring Manager: {hiring_manager_name}
+- Hiring Manager Persona: {selected_options}
+- Persona Details: {prompt_templates[selected_options]}
+- Recruiter: {recruiter_choice}
+- Key Metric Focus: {ta_metric_1_choice}
+
+Given this context, provide tailored advice that:
+1. Addresses the specific hiring manager personality type
+2. Considers the job function requirements
+3. Helps {recruiter_choice} optimize for {ta_metric_1_choice}
+4. Provides actionable strategies for this specific intake call with {hiring_manager_name}
+
+Remember to adapt your communication style and recommendations based on the hiring manager persona described above."""
         
         # Show the complete prompt being sent (for transparency)
         with st.expander("🔍 View complete prompt"):
@@ -161,7 +203,6 @@ if submit_button:
                         {"role": "system", "content": system_prompt},  # Instructions
                         {"role": "user", "content": user_question}     # User's question
                     ],
-                    temperature=temperature,  # Creativity level
                     max_tokens=2000  # Maximum response length
                 )
                 
@@ -180,7 +221,13 @@ if submit_button:
                 st.session_state.messages.append({
                     "question": user_question,
                     "answer": answer,
-                    "modifiers": selected_options
+                    "persona": selected_options,
+                    "context": {
+                        "job_functions": job_function_choice,
+                        "hiring_manager": hiring_manager_name,
+                        "recruiter": recruiter_choice,
+                        "metric": ta_metric_1_choice
+                    }
                 })
                 
             except Exception as e:
@@ -197,7 +244,13 @@ if st.session_state.messages:
     # Display each previous Q&A
     for i, msg in enumerate(reversed(st.session_state.messages)):
         with st.expander(f"Question {len(st.session_state.messages) - i}: {msg['question'][:50]}..."):
-            st.write("**Modifiers used:**", ", ".join(msg['modifiers']) if msg['modifiers'] else "None")
+            st.write("**Persona used:**", msg.get('persona', 'Not specified'))
+            st.write("**Context:**")
+            if 'context' in msg:
+                st.write(f"- Job Functions: {', '.join(msg['context']['job_functions']) if msg['context']['job_functions'] else 'None'}")
+                st.write(f"- Hiring Manager: {msg['context']['hiring_manager']}")
+                st.write(f"- Recruiter: {msg['context']['recruiter']}")
+                st.write(f"- Metric: {msg['context']['metric']}")
             st.write("**Question:**", msg['question'])
             st.write("**Answer:**", msg['answer'])
 
@@ -207,18 +260,25 @@ with st.expander("ℹ️ How to use this app"):
     st.markdown("""
     ### Quick Start Guide:
     
-    1. **Enter your API Key** (if not already configured)
-    2. **Select prompt modifiers** from the sidebar to customize how ChatGPT responds
-    3. **Choose a GPT model** (3.5 is faster, 4 is smarter)
-    4. **Adjust creativity** with the temperature slider
-    5. **Type your question** in the text area
-    6. **Click Submit** and wait for the response
+    1. **Configure the Job Profile** - Select relevant job functions
+    2. **Set up Hiring Manager details** - Enter their name and select their persona type
+    3. **Choose your configuration** - Select your name and the metric you're optimizing for
+    4. **Enter your API Key** - Add your OpenAI API key in the System Configuration section
+    5. **Ask your question** - Type your question about the hiring manager intake
+    6. **Submit** - Click the button to get personalized advice
+    
+    ### Example Questions:
+    - What questions should I ask in the intake call?
+    - How should I handle pushback on the timeline?
+    - What's the best way to discuss salary expectations?
+    - How do I get buy-in for a more flexible job description?
+    - What are the red flags I should watch for?
     
     ### Tips:
-    - Combine multiple modifiers for better results
-    - Use GPT-4 for complex questions
-    - Lower temperature for factual responses
-    - Higher temperature for creative tasks
+    - Be specific in your questions for better advice
+    - The more context you provide, the more tailored the response
+    - Use GPT-4 for more nuanced responses
+    - Review the conversation history to track insights across multiple interactions
     """)
 
 # === FOOTER ===
