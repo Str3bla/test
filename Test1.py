@@ -21,13 +21,13 @@ if 'messages' not in st.session_state:
 prompt_templates = {
     "The Straight Shooter": "Prepared, responsive, and focused on role clarity. Gives clear information, respects your time, and expects a smooth process. Needs efficiency, alignment confirmation, and clear timelines. ",
     "The Strategist": "Sees hiring as part of a broader org design or long-term plan. Talks about future goals, team structure, and alignment. Needs help defining the ideal profile and expects pushback on unrealistic asks. ",
-    "The Checklist Manager": "Fixated on rigid requirements and credentials. Often says, "They must have XYZ years of…" or lists specific companies. Needs structure, validation, and strict alignment to their checklist. ",
+    "The Checklist Manager": "Fixated on rigid requirements and credentials. Often says, They must have XYZ years of… or lists specific companies. Needs structure, validation, and strict alignment to their checklist. ",
     "The Unprepared or Indifferent": "Busy, distracted, or disengaged. Often lacks a Job Description, vague about the role, and minimally involved. Needs structured support, proactive reminders, and intake handholding. ",
     "The Technical Expert": "Deep domain knowledge, often focused on technical depth. May use jargon, fixate on tests, and downplay soft skills. Needs help translating expertise into realistic hiring signals. ",
-    "The Pressure Cooker": "Operating under urgency or executive pressure. Often says, "We needed someone yesterday," with many open roles. Needs fast traction, updates, and a sense of progress. ",
+    "The Pressure Cooker": "Operating under urgency or executive pressure. Often says, We needed someone yesterday, with many open roles. Needs fast traction, updates, and a sense of progress. ",
     "The Skeptic or Past-Burned": "Cautious from past bad hires or TA experiences. Micromanages, slow to trust, and may challenge recruiter input. Needs transparency, reliability, and re-earning of credibility. ",
     "The Overconfident Marketer": "Assumes the role or company will attract talent on its own. Skips sourcing detail and minimizes candidate concerns. Needs grounded market insight and candidate-centric perspective. ",
-    "The Aspirational Builder": "Sets a high bar, seeking "A+ players" to elevate the team. Talks about elite hiring and upgrading the team. Needs sourcing creativity, competitive intel, and strong calibration. "
+    "The Aspirational Builder": "Sets a high bar, seeking A+ players to elevate the team. Talks about elite hiring and upgrading the team. Needs sourcing creativity, competitive intel, and strong calibration. "
 }
 
 # === APP TITLE ===
