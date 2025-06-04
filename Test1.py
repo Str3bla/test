@@ -283,4 +283,4 @@ with st.expander("ℹ️ How to use this app"):
 
 # === FOOTER ===
 st.markdown("---")
-st.caption("Built with Streamlit and OpenAI API")
+st.caption("Copyright (c) 2025 Reportingology. All Rights Reserved.")
