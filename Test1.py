@@ -74,7 +74,7 @@ if google_sheets_url:
         
         # Expected columns
         expected_columns = [
-            'Applicant ID', 'Application Date', 'First Name', 'Last Name', 
+            'Applicant ID', 'Application Date', 'Recruiter Name', 'Last Name', 
             'Gender', 'Date of Birth', 'Phone Number', 'Email', 'Address', 
             'City', 'State', 'Zip Code', 'Country', 'Education Level', 
             'Years of Experience', 'Desired Salary', 'Job Title', 'Status'
