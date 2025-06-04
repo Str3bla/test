@@ -47,6 +47,99 @@ st.markdown(
 
 st.markdown("Smarter Intakes. Better Hires.")
 
+# === SIDEBAR CONFIGURATION ===
+# The sidebar appears on the left side of the screen
+with st.sidebar:
+
+    st.sidebar.markdown(
+        """
+        <div style='text-align: center; margin-top: -30px; margin-bottom: 20px;'>
+            <span style='font-size: 2rem; font-weight: 700;'>Intakeology</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    st.header("📋 Job Profile")
+
+    # TEST JOB PROFILE SELECTBOX
+    job_function_choice = st.multiselect(
+        "Select Job Function:",
+        ["Finance","Information Technology","Call Center","Sales","Back Office"]
+    )
+
+    st.divider()
+
+    st.header("💼 Hiring Manager")
+ 
+    # Define your placeholder value
+    default_placeholder = "Hiring Manager"
+
+    # Show the input field with pre-filled value
+    user_input_hiring_manager = st.text_input(
+        "Enter your hiring manager name:",
+        value=default_placeholder
+    )
+
+    # Check if the input is still unchanged or empty
+    if user_input_hiring_manager.strip() == default_placeholder or not user_input_hiring_manager.strip():
+        st.warning("⚠️ Make sure to personalize before sending.")
+
+    # Use in output
+    hiring_manager_name = user_input_hiring_manager.strip() or default_placeholder
+
+    # Hiring Manager Persona selection
+    selected_options = st.selectbox(
+        "Select Hiring Manager Persona:",
+        options=list(prompt_templates),  # Show all available templates,
+        help="What is the type of hiring manager you're going to talk to?"
+    )
+
+    st.markdown(
+    f"<p style='font-size:0.85rem; font-style:italic; color:#555;'>{prompt_templates[selected_options]}</p>",
+    unsafe_allow_html=True
+    )
+
+    st.divider()
+
+    st.header("🧑 Recruiting Configuration")
+
+    # TEST METRIC SELECTBOX
+    recruiter_choice = st.selectbox(
+        "Select Recruiter Name:",
+        ["Beth","John","Anthony","Sam"]
+    )
+
+    # TEST METRIC SELECTBOX
+    ta_metric_1_choice = st.selectbox(
+        "Select Status:",
+        ["Applied","In Review","Interviewing","Offered","Rejected"]
+    )
+
+    st.divider()
+
+    st.header("🛠️ System Configuration")
+
+        # ChatGPT Model selection
+    model_choice = st.selectbox(
+        "Select GPT Model:",
+        ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo-preview"],
+        help="GPT-3.5 is faster and cheaper, GPT-4 is more capable"
+    )
+
+    # Method 2: Using Streamlit secrets (recommended)
+    # Create .streamlit/secrets.toml file with: OPENAI_API_KEY = "your-key"
+    openai_api_key = st.text_input("OpenAI API Key", type="password")
+    if not openai_api_key:
+        st.info("Please add your OpenAI API key to continue.", icon="🗝️")
+
+# Initialize the OpenAI client outside the sidebar
+# This ensures it's available for the submit button
+client = None
+if openai_api_key:
+    client = OpenAI(api_key=openai_api_key)
+
+
 # === GOOGLE SHEETS DATA IMPORT AND VISUALIZATION ===
 st.header("📊 Applicant Pipeline Analysis")
 
@@ -146,98 +239,6 @@ if google_sheets_url:
         st.info("Make sure your Google Sheet is publicly accessible and the URL is correct.")
 
 st.divider()
-
-# === SIDEBAR CONFIGURATION ===
-# The sidebar appears on the left side of the screen
-with st.sidebar:
-
-    st.sidebar.markdown(
-        """
-        <div style='text-align: center; margin-top: -30px; margin-bottom: 20px;'>
-            <span style='font-size: 2rem; font-weight: 700;'>Intakeology</span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.header("📋 Job Profile")
-
-    # TEST JOB PROFILE SELECTBOX
-    job_function_choice = st.multiselect(
-        "Select Job Function:",
-        ["Finance","Information Technology","Call Center","Sales","Back Office"]
-    )
-
-    st.divider()
-
-    st.header("💼 Hiring Manager")
- 
-    # Define your placeholder value
-    default_placeholder = "Hiring Manager"
-
-    # Show the input field with pre-filled value
-    user_input_hiring_manager = st.text_input(
-        "Enter your hiring manager name:",
-        value=default_placeholder
-    )
-
-    # Check if the input is still unchanged or empty
-    if user_input_hiring_manager.strip() == default_placeholder or not user_input_hiring_manager.strip():
-        st.warning("⚠️ Make sure to personalize before sending.")
-
-    # Use in output
-    hiring_manager_name = user_input_hiring_manager.strip() or default_placeholder
-
-    # Hiring Manager Persona selection
-    selected_options = st.selectbox(
-        "Select Hiring Manager Persona:",
-        options=list(prompt_templates),  # Show all available templates,
-        help="What is the type of hiring manager you're going to talk to?"
-    )
-
-    st.markdown(
-    f"<p style='font-size:0.85rem; font-style:italic; color:#555;'>{prompt_templates[selected_options]}</p>",
-    unsafe_allow_html=True
-    )
-
-    st.divider()
-
-    st.header("🧑 Recruiting Configuration")
-
-    # TEST METRIC SELECTBOX
-    recruiter_choice = st.selectbox(
-        "Select Recruiter Name:",
-        ["Beth","John","Anthony","Sam"]
-    )
-
-    # TEST METRIC SELECTBOX
-    ta_metric_1_choice = st.selectbox(
-        "Select Status:",
-        ["Applied","In Review","Interviewing","Offered","Rejected"]
-    )
-
-    st.divider()
-
-    st.header("🛠️ System Configuration")
-
-        # ChatGPT Model selection
-    model_choice = st.selectbox(
-        "Select GPT Model:",
-        ["gpt-3.5-turbo", "gpt-4", "gpt-4-turbo-preview"],
-        help="GPT-3.5 is faster and cheaper, GPT-4 is more capable"
-    )
-
-    # Method 2: Using Streamlit secrets (recommended)
-    # Create .streamlit/secrets.toml file with: OPENAI_API_KEY = "your-key"
-    openai_api_key = st.text_input("OpenAI API Key", type="password")
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.", icon="🗝️")
-
-# Initialize the OpenAI client outside the sidebar
-# This ensures it's available for the submit button
-client = None
-if openai_api_key:
-    client = OpenAI(api_key=openai_api_key)
 
 # === MAIN CONTENT AREA ===
 col1, col2 = st.columns([2, 1])  # Create two columns, left one twice as wide. the right column is blank for now
