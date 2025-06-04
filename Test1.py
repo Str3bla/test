@@ -253,6 +253,12 @@ with col1:
         height=120,  # Height in pixels
         key="user_input"  # Unique identifier for this widget
     )
+
+    # TYPE OF HIRING MANAGER RESPONSE NEEDED
+    response_choice = st.selectbox(
+        "What do you want help crafting (email, chat, phone call, etc.):",
+        ["email","teams chat","phone call","zoom/teams meeting"]
+    )
     
     # Submit button
     submit_button = st.button(
@@ -286,7 +292,7 @@ Make sure to use the actual recruiter name {recruiter_choice} casually in your r
 
 Make sure to really really REALLY play towards the selected persona of the hiring manager. The selected persona is {prompt_templates[selected_options]}.
 
-Use this hiring manager persona in your response and feel free to craft a actual response the recruiter can copy and paste into a email. Make the response if you craft it an indented quote section of your overall response.
+Use this hiring manager persona in your response and feel free to craft a actual response the recruiter can use in a {response_choice} environment. Make the response if you craft it an indented quote section of your overall response.
 
 CONTEXT FOR THIS INTERACTION:
 - Job Function(s): {', '.join(job_function_choice) if job_function_choice else 'Not specified'}
