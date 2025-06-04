@@ -280,6 +280,10 @@ The Key Metric being discussed is {ta_metric_1_choice} female percent where the 
  
 Use the female percentage in your actual output.
 
+And here is the actual question the recruiter {recruiter_choice} is asking you: {user_question}
+
+Make sure to use the actual recruiter name {recruiter_choice} casually in your reply where necessary to engender trust in your output.
+
 CONTEXT FOR THIS INTERACTION:
 - Job Function(s): {', '.join(job_function_choice) if job_function_choice else 'Not specified'}
 - Hiring Manager: {hiring_manager_name}
