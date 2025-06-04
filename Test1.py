@@ -1,6 +1,9 @@
 import streamlit as st
 from openai import OpenAI
 
+import pandas as pd
+import plotly.express as px
+
 # === PAGE CONFIGURATION ===
 # This MUST be the first Streamlit command in your script
 st.set_page_config(
