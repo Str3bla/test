@@ -109,8 +109,8 @@ with st.sidebar:
 
     # TEST METRIC SELECTBOX
     ta_metric_1_choice = st.selectbox(
-        "Select Metric:",
-        ["Time to Fill","Cost per Hire"]
+        "Select Status:",
+        ["Applied","In Review","Interviewing","Offered","Rejected"]
     )
 
     st.divider()
