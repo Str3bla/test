@@ -146,7 +146,7 @@ st.header("📊 Applicant Pipeline Analysis")
 # Google Sheets URL input
 google_sheets_url = st.text_input(
     "Enter Google Sheets URL (make sure it's publicly accessible):",
-    placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0",
+    placeholder="https://docs.google.com/spreadsheets/d/1x2Jt2yl0y_aR9OczDHnuTaJYDxEaN9m7Ftb4fGt962o/edit?usp=drivesdk",
     help="Your sheet must be shared publicly or 'Anyone with the link can view'"
 )
 
