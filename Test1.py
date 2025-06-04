@@ -54,6 +54,96 @@ google_sheets_url = st.text_input(
     help="Your sheet must be shared publicly or 'Anyone with the link can view'"
 )
 
+# Process the Google Sheets URL
+if google_sheets_url:
+    try:
+        # Convert Google Sheets URL to CSV export URL
+        if '/edit' in google_sheets_url:
+            sheet_id = google_sheets_url.split('/d/')[1].split('/')[0]
+        else:
+            sheet_id = google_sheets_url.split('/d/')[1].split('/')[0]
+        
+        # Construct CSV export URL
+        csv_url = f"https://docs.google.com/spreadsheets/d/{sheet_id}/export?format=csv"
+        
+        # Read the CSV data
+        df = pd.read_csv(csv_url)
+        
+        # Expected columns
+        expected_columns = [
+            'Applicant ID', 'Application Date', 'First Name', 'Last Name', 
+            'Gender', 'Date of Birth', 'Phone Number', 'Email', 'Address', 
+            'City', 'State', 'Zip Code', 'Country', 'Education Level', 
+            'Years of Experience', 'Desired Salary', 'Job Title', 'Status'
+        ]
+        
+        # Check if all expected columns exist
+        missing_columns = [col for col in expected_columns if col not in df.columns]
+        if missing_columns:
+            st.warning(f"⚠️ Missing columns: {', '.join(missing_columns)}")
+        
+        # Filter data based on selected status
+        if 'Status' in df.columns and ta_metric_1_choice:
+            filtered_df = df[df['Status'] == ta_metric_1_choice]
+            
+            # Display metrics
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("Total Applicants", len(df))
+            with col2:
+                st.metric(f"{ta_metric_1_choice} Status", len(filtered_df))
+            with col3:
+                if len(df) > 0:
+                    percentage = (len(filtered_df) / len(df)) * 100
+                    st.metric("Percentage", f"{percentage:.1f}%")
+            
+            # Create gender distribution chart for filtered status
+            if 'Gender' in filtered_df.columns and len(filtered_df) > 0:
+                # Group by gender and count
+                gender_counts = filtered_df['Gender'].value_counts().reset_index()
+                gender_counts.columns = ['Gender', 'Count']
+                
+                # Create bar chart using Plotly
+                fig = px.bar(
+                    gender_counts, 
+                    x='Gender', 
+                    y='Count',
+                    title=f'Gender Distribution for Status: {ta_metric_1_choice}',
+                    labels={'Count': 'Number of Applicants'},
+                    color='Gender',
+                    color_discrete_map={
+                        'Male': '#3498db',
+                        'Female': '#e74c3c',
+                        'Other': '#95a5a6',
+                        'Prefer not to say': '#7f8c8d'
+                    }
+                )
+                
+                # Update layout
+                fig.update_layout(
+                    showlegend=False,
+                    height=400,
+                    xaxis_title="Gender",
+                    yaxis_title="Count"
+                )
+                
+                # Display the chart
+                st.plotly_chart(fig, use_container_width=True)
+                
+                # Show data table
+                with st.expander("View detailed data"):
+                    st.dataframe(gender_counts)
+            else:
+                st.info("No data available for the selected status or Gender column is missing.")
+        else:
+            st.error("Status column not found in the data.")
+            
+    except Exception as e:
+        st.error(f"Error loading data: {str(e)}")
+        st.info("Make sure your Google Sheet is publicly accessible and the URL is correct.")
+
+st.divider()
+
 # === SIDEBAR CONFIGURATION ===
 # The sidebar appears on the left side of the screen
 with st.sidebar:
