@@ -284,6 +284,10 @@ And here is the actual question the recruiter {recruiter_choice} is asking you: 
 
 Make sure to use the actual recruiter name {recruiter_choice} casually in your reply where necessary to engender trust in your output.
 
+Make sure to really really REALLY play towards the selected persona of the hiring manager. The selected persona is {prompt_templates[selected_options]}.
+
+Use this hiring manager persona in your response and feel free to craft a actual response the recruiter can copy and paste into a email. Make the response if you craft it an indented quote section of your overall response.
+
 CONTEXT FOR THIS INTERACTION:
 - Job Function(s): {', '.join(job_function_choice) if job_function_choice else 'Not specified'}
 - Hiring Manager: {hiring_manager_name}
