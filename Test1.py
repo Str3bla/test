@@ -276,6 +276,8 @@ if submit_button:
         # Build a comprehensive system prompt with all context
         system_prompt = f"""You are a helpful Talent Acquisition AI Assistant who is an expert in the hiring manager job intake process. 
 
+PERCENTAGE FROM GOOGLE SHEET CALCULATION: {percentage}
+
 CONTEXT FOR THIS INTERACTION:
 - Job Function(s): {', '.join(job_function_choice) if job_function_choice else 'Not specified'}
 - Hiring Manager: {hiring_manager_name}
