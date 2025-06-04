@@ -44,6 +44,16 @@ st.markdown(
 
 st.markdown("Smarter Intakes. Better Hires.")
 
+# === GOOGLE SHEETS DATA IMPORT AND VISUALIZATION ===
+st.header("📊 Applicant Pipeline Analysis")
+
+# Google Sheets URL input
+google_sheets_url = st.text_input(
+    "Enter Google Sheets URL (make sure it's publicly accessible):",
+    placeholder="https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/edit#gid=0",
+    help="Your sheet must be shared publicly or 'Anyone with the link can view'"
+)
+
 # === SIDEBAR CONFIGURATION ===
 # The sidebar appears on the left side of the screen
 with st.sidebar:
