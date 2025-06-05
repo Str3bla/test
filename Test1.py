@@ -222,17 +222,7 @@ if google_sheets_url:
                     width=100,
                     xaxis_title="Gender",
                     yaxis_title="Count"
-                )
-                
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                 # Display the chart
-                st.plotly_chart(fig, use_container_width=False)
-            with col2:
-                st.divider()
-            with col3:
-                st.divider()
-            
+                )         
                 
                 # Show data table
                 with st.expander("View detailed data"):
