@@ -219,7 +219,7 @@ if google_sheets_url:
                 fig.update_layout(
                     showlegend=False,
                     height=100,
-                    width,100,
+                    width=100,
                     xaxis_title="Gender",
                     yaxis_title="Count"
                 )
