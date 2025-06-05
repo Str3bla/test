@@ -218,13 +218,14 @@ if google_sheets_url:
                 # Update layout
                 fig.update_layout(
                     showlegend=False,
-                    height=400,
+                    height=100,
+                    width,100,
                     xaxis_title="Gender",
                     yaxis_title="Count"
                 )
                 
                 # Display the chart
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(fig, use_container_width=False)
                 
                 # Show data table
                 with st.expander("View detailed data"):
