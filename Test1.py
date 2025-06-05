@@ -224,7 +224,7 @@ if google_sheets_url:
                     yaxis_title="Count"
                 )
                 
-               col1, col2, col3 = st.columns(3)
+            col1, col2, col3 = st.columns(3)
             with col1:
                  # Display the chart
                 st.plotly_chart(fig, use_container_width=False)
